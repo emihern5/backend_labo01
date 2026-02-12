@@ -13,8 +13,41 @@ jobs:
             cd backend_labo01
             npm install
             npm test
+  integrationFrontend:
+    executor: node/default
+    steps:
+      - run: git clone https://github.com/emihern5/backend_labo01.git
+      - run: git clone https://github.com/emihern5/frontend_labo01.git
+      - run:
+          command: |
+            cd frontend_labo01
+            npm install
+            npm run build
+      - run:
+          command: |
+            cd backend_labo01
+            mkdir public
+      - run:
+          command: |
+            cp -r frontend_labo01/build/* backend_labo01/public/
+      - persist_to_workspace:
+          root: .
+          paths:
+            - backend_labo01
+  deploiement:
+    executor: node/default
+    steps:
+      - attach_workspace:
+          at: .
+      - run : ls -Rl
 
 workflows:
   build:
     jobs:
       - checkoutEtTests
+      - integrationFrontend:
+          requires:
+            - checkoutEtTests
+      - deploiement:
+          requires:
+            - integrationFrontend
