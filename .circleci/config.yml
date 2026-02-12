@@ -7,7 +7,7 @@ jobs:
   checkoutEtTests:
     executor: node/default
     steps:
-      - command: git clone https://github.com/emihern5/backend_labo01.git
+      - run: git clone https://github.com/emihern5/backend_labo01.git
       - run: cd backend_labo01
       - run: sudo npm install -g npm@latest
       - run:
