@@ -1,13 +1,19 @@
 version: 2.1
 
+orbs: 
+  node: circleci/node@7.2.1
+
 jobs:
-  sayhello:
-    description: A job that says Hello
-    machine: true
+  checkoutEtTests:
+    executor: node/default
     steps:
-      - run: echo "Hello World!"
+      - command: git clone https://github.com/emihern5/backend_labo01.git
+      - run: cd backend_labo01
+      - run: sudo npm install -g npm@latest
+      - run:
+          command: npm run test
 
 workflows:
-  monWorkflow:
+  build:
     jobs:
-      - sayhello
+      - checkoutEtTests
